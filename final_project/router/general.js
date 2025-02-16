@@ -6,21 +6,10 @@ let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
 const doesExist = (username) => {
-  let userswithsamename = username.filter((user) => {
+  let userswithsamename = users.filter((user) => {
     return user.username === username;
   });
   if (userswithsamename.length > 0) {
-    return true;
-  } else {
-    return false;
-  }
-};
-
-const authenticatedUser = (username, password) => {
-  let validusers = users.filter((user) => {
-    return user.username === username && user.password === password;
-  });
-  if (validusers.length > 0) {
     return true;
   } else {
     return false;
@@ -95,7 +84,7 @@ public_users.get("/review/:isbn", function (req, res) {
   if (book && Object.keys(book.reviews).length > 0) {
     return res.json(book.reviews);
   } else {
-    return res.status(404).json({ message: "Review not found." });
+    return res.status(404).json({ message: "No reviews yet." });
   }
 });
 
