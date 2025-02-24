@@ -5,29 +5,28 @@ let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
-const doesExist = (username) => {
-  let userswithsamename = users.filter((user) => {
-    return user.username === username;
-  });
-  if (userswithsamename.length > 0) {
-    return true;
-  } else {
-    return false;
-  }
-};
-
 //Register a new user
 public_users.post("/register", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
+  const doesExist = (username) => {
+    let existingUser = users.filter((user) => {
+      return user.username === username;
+    });
+    if (existingUser.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
   if (username && password) {
     if (!doesExist(username)) {
       users.push({ username: username, password: password });
       return res
-        .send(200)
+        .status(200)
         .json({ message: "User successfully registered. Now you can login." });
     } else {
-      return res.send(404).json({ message: "User already exists!" });
+      return res.status(404).json({ message: "User already exists!" });
     }
   }
   return res.status(400).json({ message: "Unable to register user." });
