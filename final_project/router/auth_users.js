@@ -5,26 +5,16 @@ const regd_users = express.Router();
 
 let users = [];
 
-const isValid = (users) => {
-  let validUsers = users.filter((user) => user.username === user);
-  if (validUsers) {
-    return true;
-  } else {
-    return false;
-  }
+const isValid = (username) => {
+  let validUsers = users.filter((user) => user.username === username);
+  return validUsers.length > 0;
 };
 
 const authenticatedUser = (username, password) => {
-  if (isValid(username)) {
-    let authenticateUser = users.filter(
-      (user) => user.username === username && user.password === password
-    );
-    if (authenticateUser) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  let authenticateUser = users.filter((user) =>
+    users.find(user === username && user.password === password)
+  );
+  return authenticatedUser !== undefined;
 };
 
 //only registered users can login
